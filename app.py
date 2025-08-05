@@ -15,7 +15,7 @@ app = App(token=os.environ.get("SLACK_BOT_TOKEN"))
 
 def parse_factor(frac: str):
     split = frac.split('^')
-    return int(split[0]), 1 if len(split) < 2 else int(split[1])
+    return split[0], 1 if len(split) < 2 else int(split[1])
 
 def parse_factors(factors: str):
     return defaultdict(int, dict(parse_factor(c) for c in factors.split('*')))
@@ -25,7 +25,7 @@ def parse_fraction(fracstr: str):
         yield parse_factors(b)
 
 def parse(strinput: str):
-    *fractions, input = strinput.split(' ')
+    *fractions, input = strinput.replace(',', '').split(' ')
     
     return [list(parse_fraction(a)) for a in fractions], parse_factors(input)
 

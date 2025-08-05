@@ -1,5 +1,6 @@
 from collections import defaultdict
 
+letters = list('ABCDEFGHIJKLMNOPQRSTUVWXYZ')
 primes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 51, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97]
 
 def generate_latex(fractions):
@@ -9,7 +10,7 @@ def generate_latex(fractions):
         if len(fraction[0]) == 0:
             output += "1"
         for base, exponent in fraction[0].items():
-            output += str(primes[base])
+            output += str(primes[letters.index(base)])
             if exponent > 1:
                 output += "^{" + str(exponent) + "}"
             output += " \\cdot "
@@ -17,7 +18,7 @@ def generate_latex(fractions):
             output = output[:-7]
         output += "}{"
         for base, exponent in fraction[1].items():
-            output += str(primes[base])
+            output += str(primes[letters.index(base)])
             if exponent > 1:
                 output += "^{" + str(exponent) + "}"
             output += " \\cdot "
