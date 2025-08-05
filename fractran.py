@@ -50,11 +50,11 @@ def do_once(i, fractions):
     return "end"
 
 def execute(input, fractions):
-    output = ''
+    output = []
     i=0
     while True:
         i += 1
-        output += non_zero_print(input)
+        output.append(non_zero_print(input))
         input = do_once(input, fractions)
         if input == "end" or i > 100000:
             return output, i

@@ -3,8 +3,8 @@ from slack_bolt import App
 from slack_bolt.adapter.socket_mode import SocketModeHandler
 import fractran
 import traceback
-from collections import defaultdict
 from textwrap import dedent
+from parse import parse_factor, parse_factors, parse_fraction, parse_program, parse
 
 # This sample slack application uses SocketMode
 # For the companion getting started setup guide, 
@@ -12,25 +12,6 @@ from textwrap import dedent
 
 # Initializes your app with your bot token
 app = App(token=os.environ.get("SLACK_BOT_TOKEN"))
-
-def parse_factor(frac: str):
-    split = frac.split('^')
-    return split[0], 1 if len(split) < 2 else int(split[1])
-
-def parse_factors(factors: str):
-    return defaultdict(int, dict(parse_factor(c) for c in factors.split('*')))
-
-def parse_fraction(fracstr: str):
-    for b in fracstr.split('/'):
-        yield parse_factors(b)
-
-def parse(strinput: str):
-    *fractions, input = strinput.replace(',', '').split(' ')
-    
-    return [list(parse_fraction(a)) for a in fractions], parse_factors(input)
-
-def parse_program(strinput: str):
-    return [list(parse_fraction(a)) for a in strinput.split(' ')]
 
 def handle_error(say, e: Exception, msg: str):
     print(traceback.format_exc())
@@ -52,8 +33,7 @@ def handle_error(say, e: Exception, msg: str):
     )
 
 
-@app.command('/run')
-def run_doodle(ack, say, command):
+def run_execute(ack, say, command, verbose: bool):
     ack()
 
     try:
@@ -73,7 +53,7 @@ def run_doodle(ack, say, command):
         <@{command['user_id']}>
         Input: `{command['text']}`
         Output: ```''') + \
-        output + \
+        (''.join(output) if verbose else output[-1]) + \
         dedent(f'''\
         ```
         Finished in {steps} steps
@@ -91,11 +71,20 @@ def run_doodle(ack, say, command):
         text=response,
     )
 
+@app.command('/run')
+def run(ack, say, command):
+    run_execute(ack, say, command, False)
+
+@app.command('/runverbose')
+def runverbose(ack, say, command):
+    run_execute(ack, say, command, True)
+
+
 @app.command("/latex")
 def latex(ack, say, command):
     ack()
     try:
-        fractions = [list(parse_fraction(a)) for a in command['text'].split(' ')]
+        fractions = parse_program(command['text'])
       
     except (IndexError, ValueError) as e:
         handle_error(say, e, 'Parsing Error')

@@ -22,6 +22,12 @@
                 "should_escape": false
             },
             {
+                "command": "/runverbose",
+                "description": "Executes a fractran program with all output shown",
+                "usage_hint": "[fractions] [input]",
+                "should_escape": false
+            },
+            {
                 "command": "/latex",
                 "description": "Converts fractran fractions to latex",
                 "usage_hint": "[fractions]",
