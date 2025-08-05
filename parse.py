@@ -18,5 +18,6 @@ def parse(strinput: str):
 def parse_program(strinput: str):
     return [parse_fraction(a) for a in strinput.split(' ')]
 
-# def display_fractions(fractions):
+def display_output(output: dict[str, int]):
+    return '*'.join(base if power == 1 else f'{base}^{power}' for base, power in output.items() if power != 0)
     

@@ -1,4 +1,5 @@
 from collections import defaultdict
+from parse import display_output
 
 letters = list('ABCDEFGHIJKLMNOPQRSTUVWXYZ')
 primes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 51, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97]
@@ -54,7 +55,7 @@ def execute(input, fractions):
     i=0
     while True:
         i += 1
-        output.append(non_zero_print(input))
+        output.append(display_output(input))
         input = do_once(input, fractions)
         if input == "end" or i > 100000:
             return output, i

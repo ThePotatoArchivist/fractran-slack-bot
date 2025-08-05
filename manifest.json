@@ -38,7 +38,6 @@
     "oauth_config": {
         "scopes": {
             "bot": [
-                "chat:write",
                 "commands"
             ]
         }
