@@ -29,6 +29,9 @@ def parse(strinput: str):
     
     return [list(parse_fraction(a)) for a in fractions], parse_factors(input)
 
+def parse_program(strinput: str):
+    return [list(parse_fraction(a)) for a in strinput.split(' ')]
+
 def handle_error(say, e: Exception, msg: str):
     print(traceback.format_exc())
     response = f'{msg}:\n```{type(e).__name__}: {e}```'
@@ -49,9 +52,8 @@ def handle_error(say, e: Exception, msg: str):
     )
 
 
-# Listens to incoming messages that contain "hello"
-@app.command('/fractran')
-def message_hello(ack, say, command):
+@app.command('/run')
+def run_doodle(ack, say, command):
     ack()
     
     error = False
@@ -78,7 +80,6 @@ def message_hello(ack, say, command):
         ```
         Finished in {steps} steps
         Total fractions: {len(fractions)}
-        Latex: `{fractran.generate_latex(fractions)}`
         ''')
 
     # say() sends a message to the channel where the event was triggered
@@ -92,6 +93,34 @@ def message_hello(ack, say, command):
         text=response,
     )
 
+@app.command("/latex")
+def latex(ack, say, command):
+    ack()
+    
+    error = False
+
+    try:
+        fractions, input = parse(command['text'])
+      
+    except (IndexError, ValueError) as e:
+        handle_error(say, e, 'Parsing Error')
+        return
+
+    response = dedent(f'''\
+        <@{command['user_id']}>
+        LaTeX: `{fractran.generate_latex(fractions)}`
+        ''')
+
+    say(
+        blocks=[
+            {
+                "type": "section",
+                "text": {"type": "mrkdwn", "text": response},
+            }
+        ],
+        text=response,
+    )
+    
 
 @app.action("button_click")
 def action_button_click(body, ack, say):
