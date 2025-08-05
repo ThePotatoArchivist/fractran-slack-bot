@@ -16,9 +16,15 @@
         },
         "slash_commands": [
             {
-                "command": "/fractran",
+                "command": "/run",
                 "description": "Executes a fractran program",
                 "usage_hint": "[fractions] [input]",
+                "should_escape": false
+            },
+            {
+                "command": "/latex",
+                "description": "Converts fractran fractions to latex",
+                "usage_hint": "[fractions]",
                 "should_escape": false
             }
         ]

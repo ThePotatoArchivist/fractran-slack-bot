@@ -55,8 +55,6 @@ def handle_error(say, e: Exception, msg: str):
 @app.command('/run')
 def run_doodle(ack, say, command):
     ack()
-    
-    error = False
 
     try:
         fractions, input = parse(command['text'])
@@ -96,19 +94,23 @@ def run_doodle(ack, say, command):
 @app.command("/latex")
 def latex(ack, say, command):
     ack()
-    
-    error = False
-
     try:
-        fractions, input = parse(command['text'])
+        fractions = [list(parse_fraction(a)) for a in command['text'].split(' ')]
       
     except (IndexError, ValueError) as e:
         handle_error(say, e, 'Parsing Error')
         return
 
+    try:
+        output = fractran.generate_latex(fractions)
+    except Exception as e:
+        handle_error(say, e, 'Error')
+        return
+    
+    
     response = dedent(f'''\
         <@{command['user_id']}>
-        LaTeX: `{fractran.generate_latex(fractions)}`
+        LaTeX: `{output}`
         ''')
 
     say(
