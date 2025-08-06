@@ -48,7 +48,7 @@ def run_execute(ack, respond, command, verbose: bool):
         >>> *Executor:* <@{command['user_id']}>
         *Input:* `{command['text']}`
         *Output:* ```''') + \
-        (''.join(output) if verbose else output[-1]) + \
+        (', '.join(output) if verbose else output[-1]) + \
         dedent(f'''\
         ```
         *Steps:* {steps}
