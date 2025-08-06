@@ -28,7 +28,7 @@
                 "should_escape": false
             },
             {
-                "command": "/latex",
+                "command": "/fraclatex",
                 "description": "Converts fractran fractions to latex",
                 "usage_hint": "[fractions]",
                 "should_escape": false

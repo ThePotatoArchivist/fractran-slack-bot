@@ -76,7 +76,7 @@ def runverbose(ack, respond, command):
     run_execute(ack, respond, command, True)
 
 
-@app.command("/latex")
+@app.command("/fraclatex")
 def latex(ack, respond, command):
     ack()
     try:
